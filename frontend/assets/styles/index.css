@@ -1,0 +1,79 @@
+:root {
+  --hue: 198;
+  --sat: 52%;
+  --light: 37%;
+  --primary: hsl(198, 52%, 37%);
+}
+
+body {
+  display: grid;
+  place-items: start center;
+  min-height: 100vh;
+  background-color: hsl(var(--hue) var(--sat) var(--light));
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0
+}
+
+.container {
+  --light: 75%;
+
+  width: 900px;
+  padding: 2rem;
+  border-radius: 0.25rem;
+  background-color: hsl(var(--hue) var(--sat) var(--light) / 95%);
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: fit-content;
+  max-width: max-content;
+  padding: 0.25rem 0.75rem;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  border-color: none;
+}
+
+.btn-primary {
+  border-color: var(--primary);
+  background-color: var(--primary);
+  color: hsl(var(--hue) 0% 100%);
+}
+
+.btn-outline-primary {
+  border: 2px solid var(--primary);
+  background-color: transparent;
+  color: var(--primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:not(:disabled):not(.disabled):active {
+  --light: 30%;
+
+  border-color: var(--primary);
+  background-color: hsl(var(--hue) var(--sat) var(--light));
+}
+
+.btn-primary:focus,
+.btn-primary:not(:disabled):not(.disabled):active {
+  box-shadow: 0 0 0 0.2rem hsl(var(--hue) var(--sat) 50% / 50%);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:not(:disabled):not(.disabled):active {
+  --light: 30%;
+
+  border-color: hsl(var(--hue) var(--sat) var(--light));
+  background-color: hsl(var(--hue) var(--sat) var(--light));
+  color: hsl(var(--hue) 0% 100%);
+}
+
+.btn-outline-primary:focus,
+.btn-outline-primary:not(:disabled):not(.disabled):active {
+  box-shadow: 0 0 0 0.2rem hsl(var(--hue) var(--sat) 50% / 50%);
+}
