@@ -2,14 +2,17 @@
   <main class="container">
     <FormHeader title="My forms">
       <template #action>
-        <!-- <BaseButton class="btn btn-primary">
+        <BaseButton class="btn btn-primary" @click="createNewForm">
           New Form
-        </BaseButton> -->
-        <nuxt-link class="btn btn-primary" to="/form/1">
-          New Form
-        </nuxt-link>
+        </BaseButton>
       </template>
     </FormHeader>
+
+    <section class="no-forms" aria-label="There are no forms">
+      <BaseCard>
+        <p>There are no forms here</p>
+      </BaseCard>
+    </section>
     
     <section class="forms" aria-label="My forms">
       <FormCard 
@@ -23,6 +26,7 @@
 
 <script>
 // import BaseButton from '@/components/BaseButton.vue'
+import BaseCard from '@/components/BaseCard.vue'
 import FormHeader from '@/components/FormHeader.vue'
 import FormCard from '@/components/FormCard.vue'
 
@@ -30,48 +34,26 @@ export default {
   name: 'MeusFormularios',
   components: {
     // BaseButton,
+    BaseCard,
     FormHeader,
     FormCard,
   },
-  computed: {
-    forms() {
-      return [
-        {
-          id: 1,
-          title: 'Javascript',
-          questions: 5,
-          answers: 2135,
-          updatedAt: new Date('2022-02-24T20:52:00'),
-        },
-        {
-          id: 2,
-          title: 'Vue.js',
-          questions: 3,
-          answers: 135,
-          updatedAt: new Date('2022-02-24T12:43:00'),
-        },
-        {
-          id: 3,
-          title: 'React',
-          questions: 6,
-          answers: 432,
-          updatedAt: new Date('2022-02-23T09:13:00'),
-        },
-        {
-          id: 4,
-          title: 'Flutter',
-          questions: 10,
-          answers: 238,
-          updatedAt: new Date('2022-02-22T15:27:00'),
-        },
-        {
-          id: 5,
-          title: 'Python',
-          questions: 7,
-          answers: 528,
-          updatedAt: new Date('2022-02-22T15:27:00'),
-        }
-      ]
+  async asyncData({ $axios }) {
+    const forms = (await $axios.get('/forms')).data
+
+    return { forms }
+  },
+  methods: {
+    async createNewForm() {
+      try {
+        const { data } = await this.$axios.post('/forms')
+        
+        this.$router.push({
+          path: `/form/${data.form._id}`,
+        })
+      } catch (error) {
+        
+      }
     }
   },
 }
@@ -82,6 +64,10 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-top: 1rem;
+}
+
+.no-forms {
   margin-top: 1rem;
 }
 </style>

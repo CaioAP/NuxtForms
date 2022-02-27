@@ -2,12 +2,21 @@
   <main class="container">
     <BaseButtonBack />
 
+    <BaseAlert 
+      :show="alert.show"
+      dismissible
+      :variant="alert.variant"
+      @dismissed="alert = { ...alert, show: false }"
+    >
+      {{ alert.message }}
+    </BaseAlert>
+
     <FormHeader class="form-create-header">
       <template #title>
         <BaseInput v-model="title" placeholder="Your form title"/>
       </template>
       <template #action>
-        <BaseButton class="btn btn-primary btn-save">
+        <BaseButton class="btn btn-primary btn-save" @click="saveForm">
           <fa-icon icon="floppy-disk" />
           Save Form
         </BaseButton>
@@ -47,24 +56,26 @@ export default {
     BaseInput,
     FormQuestion
   },
-  asyncData() {
-    const title = ''
-    const firstQuestion = {
-      id: 1,
-      title: '',
-      answers: [
-        {
-          id: 1, value: 'Yes'
-        }, {
-          id: 2, value: 'No'
-        }
-      ],
-      questionAlert: {}
+  async asyncData({ params, $axios }) {
+    const data = (await $axios.get(`/forms/${params.form}`)).data
+    const id = data.form._id
+    const title = data.form.title
+
+    const questions = data.questions.map(quest => {
+      quest.id = quest._id
+      return quest
+    })
+
+    return { id, title, questions }
+  },
+  data() {
+    return {
+      alert: {
+        show: false,
+        message: '',
+        variant: 'success'
+      }
     }
-
-    const questions = [firstQuestion]
-
-    return { title, questions }
   },
   methods: {
     updateQuestionTitle(questionUpdated) {
@@ -81,26 +92,44 @@ export default {
       return this.questions.find(quest => quest.id === id)
     },
 
-    addQuestion() {
+    async saveForm() {
+      try {
+        const body = {
+          title: this.title,
+          questions: this.questions,
+        }
+        const { data } = await this.$axios.patch(`/forms/${this.id}`, body)
+
+        if (data) this.alert = {
+          show: true,
+          message: 'Form saved successfuly!',
+          variant: 'success'
+        }
+      } catch (error) {
+        this.alert = {
+          show: false,
+          message: 'Error while trying to save the form!',
+          variant: 'danger'
+        }
+      }
+    },
+
+    async addQuestion() {
+      const body = { formId: this.id }
+      const { data } = await this.$axios.post('/questions', body)
+
       this.questions.push({
-        id: this.getNextQuestionId(),
-        title: '',
-        answers: [
-          {
-            id: 1, value: 'Yes'
-          }, {
-            id: 2, value: 'No'
-          }
-        ],
+        formId: data.formId,
+        id: data._id,
+        title: data.title,
+        possibleAnswers: data.possibleAnswers,
         questionAlert: {}
       })
     },
 
-    getNextQuestionId() {
-      return this.questions[this.questions.length - 1].id + 1
-    },
+    async removeQuestion(id) {
+      await this.$axios.delete(`/questions/${id}`)
 
-    removeQuestion(id) {
       const questionIndex = this.questions.findIndex(question => question.id === id)
 
       if (this.questions.length > 1) {

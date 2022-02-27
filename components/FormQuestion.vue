@@ -64,15 +64,19 @@ export default {
     FormQuestionAnswer,
   },
   props: {
+    formId: {
+      type: String,
+      required: true,
+    },
     id: {
-      type: Number,
+      type: String,
       required: true,
     },
     title: {
       type: String,
       default: ''
     },
-    answers: {
+    possibleAnswers: {
       type: Array,
       default: () => []
     },
@@ -105,9 +109,9 @@ export default {
       this.alert = newValue
     }
   },
-  mounted() {
+  created() {
     this.questionTitle = this.title
-    this.questionAnswers = this.answers
+    this.questionAnswers = this.possibleAnswers
   },
   methods: {
     addAnswer() {
