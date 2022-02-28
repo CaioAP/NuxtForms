@@ -25,21 +25,15 @@
 </template>
 
 <script>
-// import BaseButton from '@/components/BaseButton.vue'
-import BaseCard from '@/components/BaseCard.vue'
-import FormHeader from '@/components/FormHeader.vue'
-import FormCard from '@/components/FormCard.vue'
-
 export default {
-  name: 'MeusFormularios',
-  components: {
-    // BaseButton,
-    BaseCard,
-    FormHeader,
-    FormCard,
-  },
+  name: 'MyForms',
   async asyncData({ $axios }) {
-    const forms = (await $axios.get('/forms')).data
+    let forms = (await $axios.get('/forms')).data
+    
+    forms = forms.map(form => {
+      form.id = form._id
+      return form
+    })
 
     return { forms }
   },

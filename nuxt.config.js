@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'nuxt-forms',
+    title: 'My Forms',
     htmlAttrs: {
       lang: 'en',
     },
@@ -59,7 +59,6 @@ export default {
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: 'http://localhost:5000',
-    debug: true,
   },
     
   privateRuntimeConfig: {

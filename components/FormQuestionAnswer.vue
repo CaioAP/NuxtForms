@@ -13,12 +13,7 @@
 </template>
 
 <script>
-import BaseInput from '@/components/BaseInput.vue'
-
 export default {
-  components: {
-    BaseInput,
-  },
   props: {
     id: {
       type: Number,

@@ -37,7 +37,9 @@ h1, h2, h3, h4, h5, h6, p {
   border-color: none;
 }
 
-.btn-primary {
+.btn-primary,
+.btn-primary.active,
+.btn-outline-primary:not(:disabled):not(.disabled).active {
   border-color: var(--primary);
   background-color: var(--primary);
   color: hsl(var(--hue) 0% 100%);

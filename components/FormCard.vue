@@ -6,8 +6,8 @@
       </header>
 
       <div class="form-card-content">
-        <p class="form-card-questions">Questions: {{ questions }}</p>
-        <p class="form-card-answers">Answers: {{ answers }}</p>
+        <p class="form-card-questions">Questions: {{ numberOfQuestions }}</p>
+        <p class="form-card-answers">Answers: {{ numberOfAnswers }}</p>
       </div>
 
       <footer>
@@ -21,31 +21,27 @@
 </template>
 
 <script>
-import BaseCard from '@/components/BaseCard.vue';
 export default {
-  components: {
-    BaseCard,
-  },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     },
     title: {
       type: String,
       default: ''
     },
-    questions: {
+    numberOfQuestions: {
       type: Number,
       default: 0
     },
-    answers: {
+    numberOfAnswers: {
       type: Number,
       default: 0
     },
     updatedAt: {
-      type: Date,
-      default: new Date()
+      type: String,
+      default: ''
     },
   },
 }
@@ -69,6 +65,7 @@ export default {
 .form-card footer {
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
 }
 
 .form-card-datetime {

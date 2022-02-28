@@ -10,13 +10,13 @@ export default ((context, inject) => {
       const diff = Math.abs(now - datetime)
       
       const minutes = Math.round(diff / millisecondsToMinutes)
-      if (minutes < 60) return `Last updated ${minutes} minutes ago`
+      if (minutes < 60) return `Updated ${minutes} minutes ago`
 
       const hours = Math.round(minutes / minutesToHours)
-      if (hours < 24) return `Last updated ${hours} hours ago`
+      if (hours < 24) return `Updated ${hours} hours ago`
 
       datetime = Intl.DateTimeFormat('pt-BR').format(datetime)
-      return `Last updated at ${datetime}`
+      return `Updated at ${datetime}`
     }
   }
 

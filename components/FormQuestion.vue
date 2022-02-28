@@ -51,18 +51,7 @@
 </template>
 
 <script>
-import BaseAlert from '@/components/BaseAlert.vue'
-import BaseInput from '@/components/BaseInput.vue'
-import BaseButton from '@/components/BaseButton.vue'
-import FormQuestionAnswer from '@/components/FormQuestionAnswer.vue'
-
 export default {
-  components: {
-    BaseAlert,
-    BaseInput,
-    BaseButton,
-    FormQuestionAnswer,
-  },
   props: {
     formId: {
       type: String,

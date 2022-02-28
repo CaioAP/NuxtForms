@@ -1,6 +1,16 @@
 <template>
   <main class="container">
-    <BaseButtonBack />
+    <div class="header-actions">
+      <BaseButtonBack />
+      
+      <BaseRadioGroup
+        v-if="false"
+        v-model="view"
+        :options="views"
+        button-variant="outline-primary"
+        buttons
+      />
+    </div>
 
     <BaseAlert 
       :show="alert.show"
@@ -16,12 +26,25 @@
         <BaseInput v-model="title" placeholder="Your form title"/>
       </template>
       <template #action>
-        <BaseButton class="btn btn-primary btn-save" @click="saveForm">
+        <BaseButton 
+          class="btn btn-primary btn-save" 
+          :disabled="numberOfAnswers"
+          @click="saveForm"
+        >
           <fa-icon icon="floppy-disk" />
           Save Form
         </BaseButton>
       </template>
     </FormHeader>
+
+    <section class="form-email" aria-label="Your email">
+      <BaseCard>
+        <span>Share your form: </span>
+        <a :href="answersUrl">
+          {{ answersUrl }}
+        </a>
+      </BaseCard>
+    </section>
 
     <section class="form-questions" aria-label="Form questions">
       <FormQuestion
@@ -44,37 +67,46 @@
 </template>
 
 <script>
-import BaseButtonBack from '@/components/BaseButtonBack.vue'
-import BaseButton from '@/components/BaseButton.vue'
-import BaseInput from '@/components/BaseInput.vue'
-import FormQuestion from '@/components/FormQuestion.vue'
-
 export default {
-  components: {
-    BaseButtonBack,
-    BaseButton,
-    BaseInput,
-    FormQuestion
-  },
   async asyncData({ params, $axios }) {
     const data = (await $axios.get(`/forms/${params.form}`)).data
     const id = data.form._id
     const title = data.form.title
+    const numberOfAnswers = data.form.numberOfAnswers
 
     const questions = data.questions.map(quest => {
       quest.id = quest._id
       return quest
     })
 
-    return { id, title, questions }
+    return { id, title, questions, numberOfAnswers }
   },
   data() {
     return {
+      view: 'questions',
       alert: {
         show: false,
         message: '',
         variant: 'success'
       }
+    }
+  },
+  computed: {
+    answersUrl() {
+      return `http://localhost:3000/answer/${this.id}`
+    },
+
+    views() {
+      return [
+        {
+          text: 'Questions',
+          value: 'questions'
+        },
+        {
+          text: 'Answers',
+          value: 'answers'
+        },
+      ]
     }
   },
   methods: {
@@ -93,6 +125,9 @@ export default {
     },
 
     async saveForm() {
+      const valid = this.validate()
+      if (!valid) return
+
       try {
         const body = {
           title: this.title,
@@ -112,6 +147,19 @@ export default {
           variant: 'danger'
         }
       }
+    },
+
+    validate() {
+      if (this.numberOfAnswers) {
+        this.alert = {
+          show: true,
+          message: 'Cannot update, this form already has answers!',
+          variant: 'danger'
+        }
+        return false
+      }
+
+      return true
     },
 
     async addQuestion() {
@@ -148,6 +196,13 @@ export default {
 </script>
 
 <style scoped>
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 93.4%;
+}
+
 .form-create-header {
   margin-block: 1rem;
 }
@@ -160,6 +215,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-top: 1rem;
 }
 
 footer {
