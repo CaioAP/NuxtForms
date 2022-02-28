@@ -28,7 +28,7 @@
       <template #action>
         <BaseButton 
           class="btn btn-primary btn-save" 
-          :disabled="numberOfAnswers"
+          :disabled="!!numberOfAnswers"
           @click="saveForm"
         >
           <fa-icon icon="floppy-disk" />
