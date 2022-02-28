@@ -35,6 +35,12 @@ export default {
       return form
     })
 
+    forms.sort((previous, current) => {
+      if (previous.updatedAt > current.updatedAt) return -1
+      if (previous.updatedAt < current.updatedAt) return 1
+      return 0
+    })
+
     return { forms }
   },
   methods: {

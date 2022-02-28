@@ -3,10 +3,12 @@
     <div class="question-title">
       <BaseInput 
         v-model="questionTitle" 
+        :readonly="numberOfAnswers"
         class="question-title--input"
         placeholder="Question description"
       />
       <BaseButton 
+        v-show="!numberOfAnswers"
         variant="danger"
         class="btn btn-remove"
         @click="remove"
@@ -25,11 +27,13 @@
           :key="answer.id"
           v-model="answer.value"
           v-bind="answer"
+          :number-of-answers="numberOfAnswers"
           :index="idx"
           @remove="removeAnswer"
         />
 
         <BaseButton 
+          v-show="!numberOfAnswers"
           class="btn btn-outline-primary btn-add"
           @click="addAnswer"
         >
@@ -73,6 +77,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    numberOfAnswers: {
+      type: Number,
+      default: 0,
+    }
   },
   data() {
     return {

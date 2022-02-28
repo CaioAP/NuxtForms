@@ -23,7 +23,11 @@
 
     <FormHeader class="form-create-header">
       <template #title>
-        <BaseInput v-model="title" placeholder="Your form title"/>
+        <BaseInput 
+          v-model="title" 
+          placeholder="Your form title"
+          :readonly="numberOfAnswers"
+        />
       </template>
       <template #action>
         <BaseButton 
@@ -51,6 +55,7 @@
         v-for="question in questions" 
         :key="question.id" 
         v-bind="question"
+        :number-of-answers="numberOfAnswers"
         @title-updated="updateQuestionTitle"
         @answers-updated="updateQuestionAnswers"
         @remove="removeQuestion"
@@ -58,7 +63,11 @@
     </section>
 
     <footer>
-      <BaseButton class="btn btn-primary btn-save" @click="addQuestion">
+      <BaseButton 
+        v-show="!numberOfAnswers"
+        class="btn btn-primary btn-save" 
+        @click="addQuestion"
+      >
         <fa-icon icon="plus" />
         Add question
       </BaseButton>
@@ -163,6 +172,9 @@ export default {
     },
 
     async addQuestion() {
+      const valid = this.validate()
+      if (!valid) return
+
       const body = { formId: this.id }
       const { data } = await this.$axios.post('/questions', body)
 
@@ -176,6 +188,9 @@ export default {
     },
 
     async removeQuestion(id) {
+      const valid = this.validate()
+      if (!valid) return
+
       await this.$axios.delete(`/questions/${id}`)
 
       const questionIndex = this.questions.findIndex(question => question.id === id)

@@ -1,8 +1,9 @@
 <template>
   <div class="possible-answers-input">
     <span>{{ getAnswerNumber() }}. </span>
-    <BaseInput v-model="answerValue"/>
+    <BaseInput v-model="answerValue" :readonly="numberOfAnswers"/>
     <BaseButton 
+      v-show="!numberOfAnswers"
       variant="outline-danger"
       class="btn btn-remove"
       @click="remove(id)"
@@ -27,6 +28,10 @@ export default {
       type: String,
       default: '',
     },
+    numberOfAnswers: {
+      type: Number,
+      default: 0,
+    }
   },
   data() {
     return {
