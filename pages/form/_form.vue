@@ -26,7 +26,7 @@
         <BaseInput 
           v-model="title" 
           placeholder="Your form title"
-          :readonly="numberOfAnswers"
+          :readonly="!!numberOfAnswers"
         />
       </template>
       <template #action>

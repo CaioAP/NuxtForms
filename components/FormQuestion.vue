@@ -3,7 +3,7 @@
     <div class="question-title">
       <BaseInput 
         v-model="questionTitle" 
-        :readonly="numberOfAnswers"
+        :readonly="!!numberOfAnswers"
         class="question-title--input"
         placeholder="Question description"
       />

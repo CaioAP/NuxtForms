@@ -1,7 +1,7 @@
 <template>
   <div class="possible-answers-input">
     <span>{{ getAnswerNumber() }}. </span>
-    <BaseInput v-model="answerValue" :readonly="numberOfAnswers"/>
+    <BaseInput v-model="answerValue" :readonly="!!numberOfAnswers"/>
     <BaseButton 
       v-show="!numberOfAnswers"
       variant="outline-danger"
